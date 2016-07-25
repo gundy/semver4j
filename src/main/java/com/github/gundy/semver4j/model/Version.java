@@ -72,18 +72,39 @@ public class Version implements Comparable<Version> {
 	}
 
 	public boolean satisfies(String expression) {
-		ANTLRInputStream reader = new ANTLRInputStream(expression);
-		NodeSemverExpressionLexer lexer = new NodeSemverExpressionLexer(reader);
-		lexer.removeErrorListeners();
-
-		TokenStream tokens = new CommonTokenStream(lexer);
-		NodeSemverExpressionParser parser = new NodeSemverExpressionParser(tokens);
-		parser.removeErrorListeners();
-		ParseTree tree = parser.rangeSet();
+		ParseTree tree = getParseTreeForRange(expression);
 
 		SemVerRangeExpressionVisitor visitor = new SemVerRangeExpressionVisitor(this);
 		return visitor.visit(tree);
 
+	}
+
+	public static Version maxVersionSatisfying(Collection<Version> versions, String range) {
+		/* compile expression once; use on all versions */
+		ParseTree tree = getParseTreeForRange(range);
+
+		ArrayList<Version> matchingVersions = new ArrayList<Version>();
+		for (Version version : versions) {
+			if (new SemVerRangeExpressionVisitor(version).visit(tree)) {
+				matchingVersions.add(version);
+			}
+		}
+		Collections.sort(matchingVersions, Version.reverseComparator());
+		if (matchingVersions.size()>0) {
+			return matchingVersions.get(0);
+		} else {
+			return null;
+		}
+	}
+
+	private static ParseTree getParseTreeForRange(String range) {
+		ANTLRInputStream reader = new ANTLRInputStream(range);
+		NodeSemverExpressionLexer lexer = new NodeSemverExpressionLexer(reader);
+		lexer.removeErrorListeners();
+		TokenStream tokens = new CommonTokenStream(lexer);
+		NodeSemverExpressionParser parser = new NodeSemverExpressionParser(tokens);
+		parser.removeErrorListeners();
+		return parser.rangeSet();
 	}
 
 	/**
@@ -94,13 +115,7 @@ public class Version implements Comparable<Version> {
 	 */
 	public static String maxSatisfying(Collection<String> versionsToTest, String range) {
 		/* compile expression once; use on all versions */
-		ANTLRInputStream reader = new ANTLRInputStream(range);
-		NodeSemverExpressionLexer lexer = new NodeSemverExpressionLexer(reader);
-		lexer.removeErrorListeners();
-		TokenStream tokens = new CommonTokenStream(lexer);
-		NodeSemverExpressionParser parser = new NodeSemverExpressionParser(tokens);
-		parser.removeErrorListeners();
-		ParseTree tree = parser.rangeSet();
+		ParseTree tree = getParseTreeForRange(range);
 
 		ArrayList<Version> matchingVersions = new ArrayList<Version>();
 		for (String strVersion : versionsToTest) {
