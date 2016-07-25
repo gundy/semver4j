@@ -1,0 +1,7 @@
+*.java  eol=lf
+*.xml   eol=lf
+*.yml   eol=lf
+*.md    eol=lf
+*.g4    eol=lf
+*.sh    eol=lf
+*.bat   eol=crlf
