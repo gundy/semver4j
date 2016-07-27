@@ -19,10 +19,10 @@ public final class SemVerRangeExpressionVisitor extends NodeSemverExpressionBase
 		boolean verGtLeft = fullySpecifiedComparisonVersion.compareTo(left)>=0;
 
 		boolean result;
-		if (ctx.right.patch == null && ctx.right.minor == null) {
+		if (isEmpty(ctx.right.patch)  && isEmpty(ctx.right.minor)) {
 			right = right.incrementMajor();
 			result = verGtLeft && fullySpecifiedComparisonVersion.compareTo(right)<0;
-		} else if (ctx.right.patch == null) {
+		} else if (isEmpty(ctx.right.patch)) {
 			right = right.incrementMinor();
 			result = verGtLeft && fullySpecifiedComparisonVersion.compareTo(right)<0;
 		} else {
@@ -94,6 +94,9 @@ public final class SemVerRangeExpressionVisitor extends NodeSemverExpressionBase
 	}
 
 	private boolean matchesWildcard(NodeSemverExpressionParser.PartialWildcardSemverContext partialWildcardSemverContext) {
+		if (fullySpecifiedComparisonVersion.toString().trim().equals(partialWildcardSemverContext.getText().trim())) {
+			return true;
+		}
 		if (fullySpecifiedComparisonVersion.getPreReleaseIdentifiers().size()>0) {
 			return false;
 		}
@@ -124,10 +127,10 @@ public final class SemVerRangeExpressionVisitor extends NodeSemverExpressionBase
 	@Override
 	public Boolean visitFullySpecifiedSemver(NodeSemverExpressionParser.FullySpecifiedSemverContext ctx) {
 		Version version = Version.fromString(ctx.getText());
-		if (ctx.fullSemver().patch == null && ctx.fullSemver().minor == null) {
+		if (isEmpty(ctx.fullSemver().patch) && isEmpty(ctx.fullSemver().minor)) {
 			return version.getMajor() == fullySpecifiedComparisonVersion.getMajor()
 				&& fullySpecifiedComparisonVersion.getPreReleaseIdentifiers().size() == 0;
-		} else if (ctx.fullSemver().patch == null) {
+		} else if (isEmpty(ctx.fullSemver().patch)) {
 			return version.getMajor() == fullySpecifiedComparisonVersion.getMajor()
 				&& version.getMinor() == fullySpecifiedComparisonVersion.getMinor()
 				&& fullySpecifiedComparisonVersion.getPreReleaseIdentifiers().size() == 0;
@@ -143,16 +146,20 @@ public final class SemVerRangeExpressionVisitor extends NodeSemverExpressionBase
 
 	private boolean needsMatching(NodeSemverExpressionParser.IntegerContext ctx) {
 		String text = ctx != null ? ctx.getText() : null;
-		return text != null;
+		return text != null && !"".equals(text);
+	}
+
+	private boolean isEmpty(NodeSemverExpressionParser.IntegerContext ctx) {
+		return ctx == null || ctx.getText() == null || "".equals(ctx.getText());
 	}
 
 	@Override
 	public Boolean visitTildeRange(NodeSemverExpressionParser.TildeRangeContext ctx) {
 		Version left = Version.fromString(ctx.fullSemver().getText());
 		Version right;
-		if (ctx.fullSemver().minor == null && ctx.fullSemver().patch == null) {
+		if (isEmpty(ctx.fullSemver().minor) && isEmpty(ctx.fullSemver().patch)) {
 			right = left.incrementMajor();
-		} else if (ctx.fullSemver().patch == null) {
+		} else if (isEmpty(ctx.fullSemver().patch)) {
 			right = left.incrementMinor();
 		} else { /* all three specified */
 			right = left.incrementMinor();

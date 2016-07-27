@@ -206,7 +206,7 @@ public class Version implements Comparable<Version> {
 			}
 
 			private int parseOptionalInteger(NodeSemverVersionParser.IntegerContext val) {
-				if (val == null || val.getText() == null) {
+				if (val == null || val.getText() == null || "".equalsIgnoreCase(val.getText())) {
 					return 0;
 				} else {
 					return Integer.parseInt(val.getText());

@@ -50,7 +50,10 @@ public class VersionTest {
 
 	@Test
 	public void testParseValidSemverVersions() {
-		Version version = parse("1.0.0");
+		Version version = parse("0.0.0");
+		assertVersion(version, 0, 0, 0, ids(), ids());
+
+		version = parse("1.0.0");
 		assertVersion(version, 1, 0, 0, ids(), ids());
 
 		version = parse("1.0.0-alpha");
