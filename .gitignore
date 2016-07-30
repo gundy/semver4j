@@ -1,2 +1,31 @@
+#intellij
 /.idea
 *.iml
+*.iws
+
+# Eclipse
+.classpath
+.project
+.settings/
+
+# maven
+log/
+/*/log/
+target/
+/*/target/
+
+# Logs and databases #
+######################
+*.log
+*.sql
+*.sqlite
+
+# OS generated files #
+######################
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+ehthumbs.db
+Thumbs.db
