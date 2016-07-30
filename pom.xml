@@ -6,7 +6,7 @@
 
 	<groupId>com.github.gundy</groupId>
 	<artifactId>semver4j</artifactId>
-	<version>0.16.4-SNAPSHOT</version>
+	<version>0.16.5-SNAPSHOT</version>
 
 	<name>SemVer4J</name>
 	<description>Java implementation of a node-style SemVer expression parser/evaluator</description>
