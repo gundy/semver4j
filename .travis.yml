@@ -1,5 +1,5 @@
 language: java
 sudo: false
-jdk: oraclejdk8
+jdk: oraclejdk7
 #after_success:
 #  - bash <(curl -s https://codecov.io/bash)
