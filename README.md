@@ -1,6 +1,10 @@
 SemVer4J -- Evaluate node SemVer expressions in Java
 ====================================================
 
+## Build status
+
+[![Build Status](https://travis-ci.org/gundy/semver4j.svg?branch=master)](https://travis-ci.org/gundy/semver4j)
+
 ## SemVer
 
 SemVer stands for "Semantic Versioning". The [SemVer specification](http://semver.org/) defines
