@@ -39,6 +39,23 @@ public class VersionTest {
 		return results;
 	}
 
+	@Test
+	public void testIncrementMajor() {
+		Version version = Version.builder().fromString("1.2.4");
+		assertThat(version.incrementMajor().toString(), equalTo("2.0.0"));
+	}
+
+	@Test
+	public void testIncrementMinor() {
+		Version version = Version.builder().fromString("1.2.4");
+		assertThat(version.incrementMinor().toString(), equalTo("1.3.0"));
+	}
+
+	@Test
+	public void testIncrementPatch() {
+		Version version = Version.builder().fromString("1.2.4");
+		assertThat(version.incrementPatch().toString(), equalTo("1.2.5"));
+	}
 
 	@Test
 	public void testVersionParsing() {

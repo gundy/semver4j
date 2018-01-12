@@ -68,7 +68,7 @@ public class Version implements Comparable<Version> {
 	}
 
 	public Version incrementPatch() {
-		return new Version(major,minor,patch, Collections.<Identifier>emptyList(), Collections.<Identifier>emptyList());
+		return new Version(major,minor,patch+1, Collections.<Identifier>emptyList(), Collections.<Identifier>emptyList());
 	}
 
 	public boolean satisfies(String expression) {
